@@ -28,10 +28,6 @@ Pkg.REPLMode.minirepl[] = Pkg.REPLMode.MiniREPL() # re-set this given DEFAULT_IO
 
 include("utils.jl")
 
-if Base.find_package("Preferences") === nothing
-    Pkg.add("Preferences") # Needed for sandbox and artifacts tests
-end
-
 Logging.with_logger(hide_logs ? Logging.NullLogger() : Logging.current_logger()) do
     @testset "Pkg" begin
         @testset "$f" for f in [
