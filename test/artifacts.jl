@@ -6,6 +6,13 @@ import Pkg.Artifacts: pack_platform!, unpack_platform, with_artifacts_directory,
 using TOML, Dates
 import Base: SHA1
 
+# Order-dependence in the tests, so we delay this until we need it
+if Base.find_package("Preferences") === nothing
+    @info "Installing Preferences for Pkg tests"
+    Pkg.add("Preferences") # Needed for sandbox and artifacts tests
+end
+using Preferences
+
 using ..Utils
 
 # Helper function to create an artifact, then chmod() the whole thing to 0o644.  This is
@@ -310,7 +317,6 @@ end
     end
 end
 
-using Preferences
 @testset "Artifact Usage" begin
     # Don't use `temp_pkg_dir()` here because we need `Pkg.test()` to run in the
     # same package context as the one we're running in right now.  Yes, this pollutes
